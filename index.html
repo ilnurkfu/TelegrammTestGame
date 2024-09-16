@@ -123,7 +123,7 @@
       <script async src="https://telegram.org/js/telegram-widget.js?15"
               data-telegram-login="UnityTGTest"
               data-size="large"
-              data-auth-url="https://your-server-url.com/auth"
+              data-auth-url="https://http://192.168.0.2:5000/auth"
               data-request-access="write"
               onAuth="onTelegramAuth"></script>
 
@@ -139,7 +139,7 @@
               };
 
               // Отправляем данные на сервер для проверки
-              fetch('https://your-server-url.com/auth', {
+              fetch('https://http://192.168.0.2:5000/auth', {
                   method: 'POST',
                   headers: {
                       'Content-Type': 'application/json'
@@ -184,7 +184,7 @@
                   };
 
                   // Отправляем данные на сервер
-                  fetch('https://your-server-url.com/submit-score', {
+                  fetch('https://http://192.168.0.2:5000/submit-score', {
                       method: 'POST',
                       headers: {
                           'Content-Type': 'application/json'
