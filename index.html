@@ -98,11 +98,12 @@
 
     <script async src="https://telegram.org/js/telegram-web-app.js"></script>
     <script type="text/javascript">
+        // Ждем загрузки HTML документа и WebGL
         window.addEventListener('DOMContentLoaded', (event) => {
             // Инициализация Telegram Web App
             const tg = window.Telegram.WebApp;
 
-            // Получаем данные пользователя, которые передаются автоматически
+            // Получаем данные пользователя
             const initData = tg.initDataUnsafe;
 
             if (initData && initData.user) {
@@ -117,8 +118,18 @@
                     hash: initData.user.hash
                 };
 
-                // Отправляем данные в Unity
-                unityInstance.SendMessage('GameManager', 'ReceiveTelegramData', JSON.stringify(userData));
+                // Ждем загрузки Unity WebGL перед отправкой данных
+                createUnityInstance(document.querySelector("#unityContainer"), {
+                    onProgress: UnityProgress
+                }).then((unityInstance) => {
+                    console.log("Unity WebGL загружен");
+
+                    // Отправляем данные в Unity
+                    unityInstance.SendMessage('GameManager', 'ReceiveTelegramData', JSON.stringify(userData));
+                    console.log("Данные отправлены в Unity:", JSON.stringify(userData));
+                }).catch((error) => {
+                    console.error("Ошибка загрузки Unity WebGL:", error);
+                });
             } else {
                 console.error('Ошибка: данные о пользователе не найдены.');
             }
