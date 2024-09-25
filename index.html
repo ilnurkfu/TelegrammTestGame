@@ -98,8 +98,8 @@
 
     <script async src="https://telegram.org/js/telegram-web-app.js"></script>
     <script type="text/javascript">
-        // Функция для отправки данных в Unity
-        function sendTelegramDataToUnity() {
+        // Функция для передачи данных в Unity из JavaScript
+        function GetTelegramData() {
             const tg = window.Telegram.WebApp;
             const initData = tg.initDataUnsafe;
 
@@ -115,11 +115,10 @@
                     hash: initData.user.hash
                 };
 
-                // Отправляем данные в Unity
-                unityInstance.SendMessage('GameManager', 'ReceiveTelegramData', JSON.stringify(userData));
-                console.log("Данные отправлены в Unity:", JSON.stringify(userData));
+                return JSON.stringify(userData);  // Возвращаем данные как строку JSON
             } else {
                 console.error('Ошибка: данные о пользователе не найдены.');
+                return null;
             }
         }
     </script>
