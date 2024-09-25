@@ -96,13 +96,34 @@
 
     </script>
 
-    <!-- Telegram Login Widget -->
-    <script async src="https://telegram.org/js/telegram-widget.js?15"
-            data-telegram-login="UnityTGTest"
-            data-size="large"
-            data-auth-url=""
-            data-request-access="write"
-            onAuthCallback="onTelegramAuth(user)"></script>
+    <script async src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script type="text/javascript">
+        window.addEventListener('DOMContentLoaded', (event) => {
+            // Инициализация Telegram Web App
+            const tg = window.Telegram.WebApp;
+
+            // Получаем данные пользователя, которые передаются автоматически
+            const initData = tg.initDataUnsafe;
+
+            if (initData && initData.user) {
+                console.log('Авторизация через Telegram: ', initData.user);
+
+                // Формируем объект с данными пользователя
+                const userData = {
+                    id: initData.user.id,
+                    username: initData.user.username,
+                    first_name: initData.user.first_name,
+                    last_name: initData.user.last_name,
+                    hash: initData.user.hash
+                };
+
+                // Отправляем данные в Unity
+                unityInstance.SendMessage('GameManager', 'ReceiveTelegramData', JSON.stringify(userData));
+            } else {
+                console.error('Ошибка: данные о пользователе не найдены.');
+            }
+        });
+    </script>
 
     <script type="text/javascript">
         function onTelegramAuth(user) {
