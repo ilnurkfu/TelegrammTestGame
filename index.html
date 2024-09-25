@@ -98,16 +98,13 @@
 
     <script async src="https://telegram.org/js/telegram-web-app.js"></script>
     <script type="text/javascript">
-        // Ждем загрузки HTML документа и WebGL
-        window.addEventListener('DOMContentLoaded', (event) => {
-            // Инициализация Telegram Web App
+        // Функция для отправки данных в Unity
+        function sendTelegramDataToUnity() {
             const tg = window.Telegram.WebApp;
-
-            // Получаем данные пользователя
             const initData = tg.initDataUnsafe;
 
             if (initData && initData.user) {
-                console.log('Авторизация через Telegram: ', initData.user);
+                console.log('Данные Telegram получены: ', initData.user);
 
                 // Формируем объект с данными пользователя
                 const userData = {
@@ -118,22 +115,13 @@
                     hash: initData.user.hash
                 };
 
-                // Ждем загрузки Unity WebGL перед отправкой данных
-                createUnityInstance(document.querySelector("#unityContainer"), {
-                    onProgress: UnityProgress
-                }).then((unityInstance) => {
-                    console.log("Unity WebGL загружен");
-
-                    // Отправляем данные в Unity
-                    unityInstance.SendMessage('GameManager', 'ReceiveTelegramData', JSON.stringify(userData));
-                    console.log("Данные отправлены в Unity:", JSON.stringify(userData));
-                }).catch((error) => {
-                    console.error("Ошибка загрузки Unity WebGL:", error);
-                });
+                // Отправляем данные в Unity
+                unityInstance.SendMessage('GameManager', 'ReceiveTelegramData', JSON.stringify(userData));
+                console.log("Данные отправлены в Unity:", JSON.stringify(userData));
             } else {
                 console.error('Ошибка: данные о пользователе не найдены.');
             }
-        });
+        }
     </script>
 
     <script type="text/javascript">
